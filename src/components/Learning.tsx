@@ -1,7 +1,14 @@
 import { ArrowBack, ArrowRight, NextPlan, VolumeOff, VolumeUp } from "@mui/icons-material";
 import { Button, Container, Stack, Typography } from "@mui/material";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { TranslateWord } from "../utils/features";
+import { useDispatch, useSelector } from "react-redux";
+import { getWordsFail, getWordsRequest, getWordsSuccess } from "../Redux/slice";
+import { RootState } from "@reduxjs/toolkit/query";
+import { words } from "lodash";
+import Loader from "./Loader";
+
 
 
 function Learning() {
@@ -10,12 +17,33 @@ function Learning() {
     const params = useSearchParams()[0].get("languages") as langType;
     // UseNavigate
     const navigate = useNavigate();
+
+    const dispatch = useDispatch(); 
+    const {result,loading,words} = useSelector((state:{root:StateType})=>(
+        state.root
+    ))
+    console.log();
+    console.log(loading);
+    console.log(result);
+    
     // next Handler
     const nextHandler = (): void => {
         setCount((prev) => prev + 1);
     }
 
-    return (
+
+    useEffect(() => {
+        dispatch(getWordsRequest())
+        TranslateWord(params || "hi").then((value) => {
+            dispatch(getWordsSuccess(value));
+        }).catch((error)=>{
+            dispatch(getWordsFail(error));
+        })
+    },[]);
+
+
+    if(loading) return <Loader />
+    else return (
         <Container maxWidth="sm" sx={{ padding: "1rem" }}>
             <Button
                 variant="contained"
@@ -33,10 +61,10 @@ function Learning() {
 
             <Stack direction={"row"} spacing={"1rem"}>
                 <Typography variant="h4">
-                    {count + 1} - {"Sample"}
+                    {count + 1} - {words[count]?.word}
                 </Typography>
                 <Typography color={"purple"} variant="h4">
-                    :{"Lol"}
+                    :{words[count]?.meaning}
                 </Typography>
                 <Button sx={{ borderRadius: "50%" }}>
                     <VolumeUp />
@@ -45,10 +73,10 @@ function Learning() {
             <Button
                 sx={{ margin: "3rem 0" }}
                 variant="contained"
-                fullWidth 
-                onClick={count === 7 ?()=>navigate("/quiz"):()=>setCount(prev=>prev+1)}
-                >
-                { count ===7 ? "Test":"Next"}
+                fullWidth
+                onClick={count === words.length-1 ? () => navigate("/quiz") : () => setCount(prev => prev + 1)}
+            >
+                {count === words.length-1 ? "Test" : "Next"}
                 <ArrowRight />
             </Button>
         </Container>
