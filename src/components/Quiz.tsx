@@ -1,21 +1,28 @@
 import { Button, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from "@mui/material";
 import { useState } from "react"
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function Quiz() {
-    const [result, setResult] = useState<string[]>([]);
+    const [results, setResults] = useState<string[]>([]);
     const [count, setCount] = useState<number>(0);
     const [answer, setAnswer] = useState<string>("");
 
+    // State Root
+    const { words } = useSelector((state: { root: StateType }) => (
+        state.root
+    ))
+
     // Navigate 
     const navigate = useNavigate();
-    
+
     // Next Handler
     const nextHandler = (): void => {
-        setResult((prev) => ([...prev, answer]))
+        setResults((prev) => ([...prev!, answer]))
         setCount((prev) => prev + 1);
         setAnswer("")
     }
+
     return (
         <Container
             maxWidth="sm"
@@ -26,7 +33,7 @@ function Quiz() {
             <Typography m={"2rem 0"}>Quiz</Typography>
 
             <Typography variant={"h3"}>
-                {count + 1} - {"Random"}
+                {count + 1} - {words[0].word}
             </Typography>
 
             <FormControl>
@@ -39,11 +46,16 @@ function Quiz() {
                     Meaning
                 </FormLabel>
                 <RadioGroup value={answer} onChange={(e) => setAnswer(e.target.value)}>
-                        <FormControlLabel
-                            value={"Lol"}
-                            control={<Radio />}
-                            label={"option"}
-                        />
+                    {
+                        words[count]?.options.map((value,index) => (
+                            <FormControlLabel
+                                key={value}
+                                value={value}
+                                control={<Radio />}
+                                label={value}
+                            />
+                        ))
+                    }
                 </RadioGroup>
             </FormControl>
 
@@ -55,7 +67,7 @@ function Quiz() {
                 fullWidth
                 disabled={answer === ""}
             >
-                {count === 7?"Submit":"Next"}
+                {count === words.length - 1 ? "Submit" : "Next"}
             </Button>
         </Container>
     )

@@ -5,6 +5,7 @@ import { generate } from "random-words";
 
 export const TranslateWord = async (toLag: langType)=> {
     try {
+        // url: 'https://microsoft-translator-text.p.rapidapi.com/translate',
 
 
         const words = (generate(8) as string[]).map((value) => (
@@ -27,8 +28,6 @@ export const TranslateWord = async (toLag: langType)=> {
             },
         })
 
-        console.log(response);
-        
         const receive:FetchedDataType[] = response.data;
 
         const arr:WordType[] =receive.map((value,index)=>{
@@ -39,6 +38,7 @@ export const TranslateWord = async (toLag: langType)=> {
             }
         }); 
 
+        console.log(arr);
         
         return arr
     } catch (error) {

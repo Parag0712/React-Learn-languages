@@ -39,7 +39,7 @@ function Home() {
                         <Button 
                             key={value.code} 
                             variant="contained" 
-                            onClick={()=>languageSelectHandler(value.name)}>
+                            onClick={()=>languageSelectHandler(value.code)}>
                             {value.name}
                         </Button>
                     ))
