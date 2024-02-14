@@ -7,8 +7,10 @@ function Quiz() {
     const [count, setCount] = useState<number>(0);
     const [answer, setAnswer] = useState<string>("");
 
+    // Navigate 
     const navigate = useNavigate();
-    // 
+    
+    // Next Handler
     const nextHandler = (): void => {
         setResult((prev) => ([...prev, answer]))
         setCount((prev) => prev + 1);
