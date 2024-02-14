@@ -29,7 +29,7 @@ function Home() {
     }
 
     return (
-        <Container maxWidth={"sm"}>
+        <Container maxWidth={"sm"} >
             <Typography variant="h3" p={"2rem"} textAlign={"center"}>
                 Welcome Begin your journey of learning.
             </Typography>
