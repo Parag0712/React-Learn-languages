@@ -2,13 +2,25 @@ import axios from "axios";
 import { generate } from "random-words";
 import _ from 'lodash'
 
-const generateMcq = (meaning: {
+const generateMcq = (
+meaning: {
     Text: string;
-}[], idx: number): string[] => {
-    const correctAns: string = meaning[idx].Text;    
+}[], 
+idx: number): string[] => {
+    //This Is Correct meaning
+    
+    const correctAns: string = meaning[idx].Text;        
+    
+    // An Array with all words except for correct ans 
     const allMeaningExpectCorrect = meaning.filter((i)=>i.Text !== correctAns); 
-    const incorrectOptions:string[] = _.sampleSize(allMeaningExpectCorrect,3).map((i)=>i.Text); 
-    return [correctAns];
+
+    // Randomly genrating 3 elements from incorrectArray
+    const incorrectOptions:string[] = _.sampleSize(
+        allMeaningExpectCorrect,3).map((i)=>i.Text); 
+
+    const mcqOptions = _.shuffle([...incorrectOptions,correctAns]);
+
+    return mcqOptions;
 }
 
 
@@ -39,7 +51,7 @@ export const TranslateWord = async (toLag: langType) => {
         const receive: FetchedDataType[] = response.data;
 
         const arr: WordType[] = receive.map((value, index) => {
-            const options: string[] = [];
+            const options: string[] = generateMcq(words,index);
             return {
                 word: value.translations[0].text,
                 meaning: words[index].Text,
@@ -47,6 +59,7 @@ export const TranslateWord = async (toLag: langType) => {
             }
         });
 
+        
         console.log(arr);
 
         return arr
