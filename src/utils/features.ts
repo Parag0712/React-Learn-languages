@@ -1,12 +1,20 @@
 import axios from "axios";
 import { generate } from "random-words";
+import _ from 'lodash'
+
+const generateMcq = (meaning: {
+    Text: string;
+}[], idx: number): string[] => {
+    const correctAns: string = meaning[idx].Text;    
+    const allMeaningExpectCorrect = meaning.filter((i)=>i.Text !== correctAns); 
+    const incorrectOptions:string[] = _.sampleSize(allMeaningExpectCorrect,3).map((i)=>i.Text); 
+    return [correctAns];
+}
 
 
-
-export const TranslateWord = async (toLag: langType)=> {
+export const TranslateWord = async (toLag: langType) => {
     try {
         // url: 'https://microsoft-translator-text.p.rapidapi.com/translate',
-
 
         const words = (generate(8) as string[]).map((value) => (
             {
@@ -28,22 +36,23 @@ export const TranslateWord = async (toLag: langType)=> {
             },
         })
 
-        const receive:FetchedDataType[] = response.data;
+        const receive: FetchedDataType[] = response.data;
 
-        const arr:WordType[] =receive.map((value,index)=>{
-            return{
-                word:value.translations[0].text,
-                meaning:words[index].Text,
-                options:["asd"]
+        const arr: WordType[] = receive.map((value, index) => {
+            const options: string[] = [];
+            return {
+                word: value.translations[0].text,
+                meaning: words[index].Text,
+                options: options
             }
-        }); 
+        });
 
         console.log(arr);
-        
+
         return arr
     } catch (error) {
         console.log(error);
         throw new Error("Some Error")
-        
+
     }
 }
