@@ -12,17 +12,20 @@ function Result() {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [count,setCount] = useState<number>();
+    const [count,setCount] = useState<number>(0);
+    // const [percentage,setPercentage] = useState<number>();
 
     console.log(words);
     console.log(result);
-
+        
     useEffect(()=>{
-        const length:number = words.filter((i,idx)=>{
+        const correctAns:number = words.filter((i,idx)=>{
             return i.meaning == result[idx]
         }).length;
-        setCount(length);
-    })
+        setCount(correctAns);
+    });
+    const percentage = (count / words.length) * 100;
+
 
     const resetHandler = ()=>{
         navigate("/");
@@ -81,9 +84,9 @@ function Result() {
             <Typography
                 m={"1rem"}
                 variant="h5"
-                // color={percentage > 50 ? "green" : "red"}
+                color={percentage > 50 ? "green" : "red"}
             >
-                {/* {percentage > 50 ? "Pass" : "Fail"} */}
+                {percentage > 50 ? "Pass" : "Fail"}
             </Typography>
 
             <Button
