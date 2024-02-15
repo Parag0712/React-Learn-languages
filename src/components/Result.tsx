@@ -44,12 +44,12 @@ function Result() {
             <Stack direction={"row"} justifyContent={"space-evenly"}>
                 <Stack>
                     <Typography m={"1rem 0"} variant="h5">
-                        Your Ans
+                        Word
                     </Typography>
                     <List>
-                        {result.map((i, idx) => (
+                        {words.map((i, idx) => (
                             <ListItem key={idx}>
-                                {idx + 1} - {i} 
+                                {idx + 1} - {i.word} 
                             </ListItem>
                         ))}
                     </List>

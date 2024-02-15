@@ -64,11 +64,9 @@ export const TranslateWord = async (toLag: langType) => {
         });
 
 
-        console.log(arr);
 
         return arr
     } catch (error) {
-        console.log(error);
         throw new Error("Some Error")
 
     }

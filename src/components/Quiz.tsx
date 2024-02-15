@@ -9,7 +9,6 @@ function Quiz() {
     const [count, setCount] = useState<number>(0);
     const [answer, setAnswer] = useState<string>("");
 
-    console.log(answer);
     
     // State Root
     const { words } = useSelector((state: { root: StateType }) => (
@@ -61,7 +60,7 @@ function Quiz() {
                 </FormLabel>
                 <RadioGroup value={answer} onChange={(e) => setAnswer(e.target.value)}>
                     {
-                        words?.[count]?.options.map((value, index) => (
+                        words?.[count]?.options.map((value  ) => (
                             <FormControlLabel
                                 key={value}
                                 value={value}

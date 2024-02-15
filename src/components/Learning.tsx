@@ -1,4 +1,4 @@
-import { ArrowBack, ArrowRight, NextPlan, VolumeOff, VolumeUp } from "@mui/icons-material";
+import { ArrowBack, ArrowRight, VolumeUp } from "@mui/icons-material";
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -19,7 +19,7 @@ function Learning() {
     // UseNavigate
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { result, loading, words, error } = useSelector((state: { root: StateType }) => (
+    const {  loading, words, error } = useSelector((state: { root: StateType }) => (
         state.root
     ));
 
@@ -34,7 +34,6 @@ function Learning() {
         TranslateWord(params || "hi").then((value) => {
             dispatch(getWordsSuccess(value));
         }).catch((err) => {
-            console.log(err);
 
             dispatch(getWordsFail(err.message));
         })
@@ -97,7 +96,7 @@ function Learning() {
                 sx={{ margin: "3rem 0" }}
                 variant="contained"
                 fullWidth
-                onClick={count === words.length - 1 ? () => navigate("/quiz") : () => setCount((prev) => prev + 1)}
+                onClick={count === words.length - 1 ? () => navigate("/quiz") : nextHandler}
             >
                 {count === words.length - 1 ? "Test" : "Next"}
                 <ArrowRight />

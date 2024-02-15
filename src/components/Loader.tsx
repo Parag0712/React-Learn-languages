@@ -1,6 +1,8 @@
+import { LinearProgress } from "@mui/material"
+
 function Loader() {
     return (
-        <div>Loader</div>
+        <div><LinearProgress /></div>
     )
 }
 
