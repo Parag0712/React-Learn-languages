@@ -1,13 +1,16 @@
 import { Button, Container, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography } from "@mui/material";
-import { useState } from "react"
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { saveResult } from "../Redux/slice";
 
 function Quiz() {
     const [results, setResults] = useState<string[]>([]);
     const [count, setCount] = useState<number>(0);
     const [answer, setAnswer] = useState<string>("");
 
+    console.log(answer);
+    
     // State Root
     const { words } = useSelector((state: { root: StateType }) => (
         state.root
@@ -15,13 +18,24 @@ function Quiz() {
 
     // Navigate 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     // Next Handler
     const nextHandler = (): void => {
-        setResults((prev) => ([...prev!, answer]))
+        // Answer Add in result
+        setResults((prev) => ([...prev!, answer]));
         setCount((prev) => prev + 1);
         setAnswer("")
     }
+
+
+    useEffect(() => {
+
+        if(count+1>words.length){
+            navigate("/result")
+        }
+        dispatch(saveResult(results));
+    }, [results])
 
     return (
         <Container
@@ -33,7 +47,7 @@ function Quiz() {
             <Typography m={"2rem 0"}>Quiz</Typography>
 
             <Typography variant={"h3"}>
-                {count + 1} - {words[0].word}
+                {count + 1} - {words[count]?.word}
             </Typography>
 
             <FormControl>
@@ -47,7 +61,7 @@ function Quiz() {
                 </FormLabel>
                 <RadioGroup value={answer} onChange={(e) => setAnswer(e.target.value)}>
                     {
-                        words[count]?.options.map((value,index) => (
+                        words?.[count]?.options.map((value, index) => (
                             <FormControlLabel
                                 key={value}
                                 value={value}
@@ -66,6 +80,7 @@ function Quiz() {
                 variant="contained"
                 fullWidth
                 disabled={answer === ""}
+                onClick={nextHandler}
             >
                 {count === words.length - 1 ? "Submit" : "Next"}
             </Button>

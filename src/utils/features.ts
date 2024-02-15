@@ -34,7 +34,7 @@ export const TranslateWord = async (toLag: langType)=> {
             return{
                 word:value.translations[0].text,
                 meaning:words[index].Text,
-                options:[]
+                options:["asd"]
             }
         }); 
 
