@@ -28,7 +28,7 @@ const generateMcq = (
 
 
 export const TranslateWord = async (toLag: langType) => {
-    
+
     try {
         // url: 'https://microsoft-translator-text.p.rapidapi.com/translate',
 
